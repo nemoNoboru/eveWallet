@@ -27,8 +27,8 @@ function requestTransactionsFromEve(){
       .then( function (response) {
         response.text().then(function (body) {
           parseString(body, function (err, result) {
-            console.log(JSON.stringify(result.eveapi.result[0]))
-            resolve(JSON.stringify(result.eveapi.result[0]))
+            console.log(processTransactions(result.eveapi.result[0].rowset[0].row))
+            resolve(processTransactions(result.eveapi.result[0].rowset[0].row))
           });
         })
       })
@@ -38,4 +38,18 @@ function requestTransactionsFromEve(){
   })
 }
 
-export default requestTransactionsFromEve;
+function processTransactions(transactions){
+  processed = transactions.map(function (transaction) {
+    var t = {}
+    t.time = transaction.$.transactionDateTime
+    t.quantity = transaction.$.quantity
+    t.price = transaction.$.price
+    t.type = transaction.$.transactionType
+    t.name = transaction.$.typeName
+    t.stationName = transaction.$.stationNameto
+    return t
+  })
+  return processed
+}
+
+export {requestBalanceFromEve, requestTransactionsFromEve}

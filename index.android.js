@@ -9,31 +9,45 @@ import {
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  ScrollView,
+  RefreshControl
 } from 'react-native';
-
-import requestTransactionsFromEve from './app/core/walletFetcher';
+import Transaction from './app/components/transaction';
+import Balance from './app/components/balance';
+import {requestTransactionsFromEve,
+        requestBalanceFromEve } from './app/core/walletFetcher';
 
 export default class eveWallet extends Component {
   constructor(props){
     super(props)
-    this.state = {balance:"Loading..."}
+    this.state = {transactions:[], refreshing:true}
   }
 
   componentDidMount(){
+    this.fetchData()
+  }
+
+  fetchData = () => {
     requestTransactionsFromEve().then(
-      (data) => {this.setState({balance:data})}
+      (data) => {this.setState({transactions:data, refreshing:false})}
+    )
+    requestBalanceFromEve().then(
+      (balance) => {this.setState({balance:balance})}
     )
   }
 
   render() {
+    var transactions = this.state.transactions.map((i) => { return <Transaction t={i}/>})
     return (
-      <View style={styles.container}>
-        <Text>Eve wallet</Text>
-        <Text>
-          {this.state.balance}
-        </Text>
-      </View>
+      <ScrollView style={styles.container}
+      refreshControl = {
+        <RefreshControl
+          refreshing={this.state.refreshing}
+          onRefresh={this.fetchData}/>
+      }>
+      <Balance balance="122222"/>
+        {transactions}
+      </ScrollView>
     );
   }
 }
@@ -41,20 +55,8 @@ export default class eveWallet extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+    backgroundColor: '#fff',
+  }
 });
 
 AppRegistry.registerComponent('eveWallet', () => eveWallet);
