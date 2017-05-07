@@ -16,25 +16,35 @@ export default class Transaction extends Component {
     var value = currencyFormatter.format(this.props.t.price*this.props.t.quantity, {
     symbol: 'ISK',
     decimal: '.',
-    thousand: ',',
+    thousand: ' , ',
     precision: 2,
     format: '%v %s' // %s is the symbol and %v is the value
     });
     return (
       <View style={card}>
         <View style={container}>
-          <Text style={{color:'#000',fontSize:17,fontWeight: 'bold',flex:1}}> {this.props.t.name} </Text>
-          <Text style={[s,{fontSize:17,fontWeight: 'bold'}]}> {value} </Text>
+          <Text style={name}> {this.props.t.name.toUpperCase()} </Text>
+          <Text style={[s,quantity]}> {value} </Text>
         </View>
         <View style={container}>
-          <Text style={{flex:1}}> {this.props.t.time} </Text>
-        </View>
-        <View style={container}>
-          <Text style={{color:"#a0a0a0",flex:1}}> {this.props.t.stationName} </Text>
+          <Text style={{fontSize:14,color:"#b8bbc3",flex:1,fontFamily:'Lato-Regular'}}> {this.props.t.stationName.split("-")[0]} </Text>
+          <Text style={{fontSize:14,color:"#000",fontFamily:'Lato-Bold'}}> {this.props.t.price} ISK  x  {this.props.t.quantity} u </Text>
         </View>
       </View>
     );
   }
+}
+
+var name = {
+  color:'#000',
+  fontSize:18,
+  flex:1,
+  fontFamily:'Lato-Regular',
+}
+
+var quantity = {
+  fontSize:18,
+  fontFamily:'Lato-Bold',
 }
 
 var container = {

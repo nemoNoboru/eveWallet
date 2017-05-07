@@ -1,5 +1,6 @@
 var parseString = require('react-native-xml2js').parseString;
-
+var moment = require('moment');
+var _ = require('lodash');
 var eveId = {
   keyID: '6193649',
   vCode: 'vZG2GPKtLDFAf4JqItKnaonGHoaKwGuDT0IVbN8kzmqTd1CtO2hD2QyHSFXJYruh'
@@ -27,7 +28,6 @@ function requestTransactionsFromEve(){
       .then( function (response) {
         response.text().then(function (body) {
           parseString(body, function (err, result) {
-            console.log(processTransactions(result.eveapi.result[0].rowset[0].row))
             resolve(processTransactions(result.eveapi.result[0].rowset[0].row))
           });
         })
@@ -41,12 +41,12 @@ function requestTransactionsFromEve(){
 function processTransactions(transactions){
   processed = transactions.map(function (transaction) {
     var t = {}
-    t.time = transaction.$.transactionDateTime
+    t.time = moment(transaction.$.transactionDateTime)
     t.quantity = transaction.$.quantity
     t.price = transaction.$.price
     t.type = transaction.$.transactionType
     t.name = transaction.$.typeName
-    t.stationName = transaction.$.stationNameto
+    t.stationName = transaction.$.stationName
     return t
   })
   return processed

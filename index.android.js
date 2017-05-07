@@ -12,7 +12,7 @@ import {
   ScrollView,
   RefreshControl
 } from 'react-native';
-import Transaction from './app/components/transaction';
+import TransactionManager from './app/components/transaction_manager';
 import Balance from './app/components/balance';
 import {requestTransactionsFromEve,
         requestBalanceFromEve } from './app/core/walletFetcher';
@@ -28,6 +28,7 @@ export default class eveWallet extends Component {
   }
 
   fetchData = () => {
+    this.setState({refreshing:true})
     requestTransactionsFromEve().then(
       (data) => {this.setState({transactions:data, refreshing:false})}
     )
@@ -37,7 +38,6 @@ export default class eveWallet extends Component {
   }
 
   render() {
-    var transactions = this.state.transactions.map((i) => { return <Transaction t={i}/>})
     return (
       <ScrollView style={styles.container}
       refreshControl = {
@@ -45,8 +45,8 @@ export default class eveWallet extends Component {
           refreshing={this.state.refreshing}
           onRefresh={this.fetchData}/>
       }>
-      <Balance balance="122222"/>
-        {transactions}
+      <Balance balance={this.state.balance}/>
+        <TransactionManager transactions={this.state.transactions}/>
       </ScrollView>
     );
   }

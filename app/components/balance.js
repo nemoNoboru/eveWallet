@@ -19,16 +19,30 @@ export default class Balance extends Component {
 
     return(
       <View style={balance_container}>
-        <Text>{value}</Text>
-        <Text>AVAILABLE BALANCE</Text>
+        <Text style={head}>{value}</Text>
+        <Text style={available}>AVAILABLE BALANCE</Text>
       </View>
     )
   }
 }
 
 var balance_container = {
-  padding: 100,
-  backgroundColor: "#A8A8EC",
+  padding: 20,
+  paddingTop:70,
+  paddingBottom:70,
+  backgroundColor: "#f0c05d",
   alignItems:'center',
   justifyContent:'center',
+}
+
+var head = {
+  fontFamily:'Lato-Regular',
+  color:'#4f2e2f',
+  fontSize:33,
+}
+
+var available = {
+  fontFamily:'Lato-Regular',
+  fontSize:14,
+  color:'#4f2e2f',
 }
