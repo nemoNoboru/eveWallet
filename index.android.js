@@ -27,12 +27,18 @@ export default class eveWallet extends Component {
 
     _handleChangeTab = index => this.setState({ index });
 
-    _renderHeader = props => <TabViewPagerPan {...props} />;
+    //_renderHeader = props => <TabViewPagerPan {...props} />;
 
-    _renderScene = SceneMap({
-      '1': Balance,
-      '2': Transactions,
-    });
+    _renderScene = ({route}) => {
+      switch (route.key) {
+        case '1':
+          return <BalanceMain />;
+        case '2':
+          return <BalanceMain />;
+      default:
+        return null;
+      }
+    }
 
   render() {
     return (
@@ -42,6 +48,7 @@ export default class eveWallet extends Component {
         renderScene={this._renderScene}
         renderHeader={this._renderHeader}
         onRequestChangeTab={this._handleChangeTab}
+        lazy={true}
       />
     );
   }

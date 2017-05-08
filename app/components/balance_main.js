@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
   AppRegistry,
   StyleSheet,
@@ -15,7 +15,7 @@ import {
 } from '../core/walletFetcher';
 
 
-export default class BalanceMain extends Component {
+export default class BalanceMain extends PureComponent {
   constructor(props){
     super(props)
     this.state = {transactions:[], refreshing:true}
