@@ -12,6 +12,7 @@
     "moment": "^2.18.1",
     "react": "16.0.0-alpha.6",
     "react-native": "0.44.0",
+    "react-native-tab-view": "0.0.63",
     "react-native-xml2js": "^1.0.3"
   },
   "devDependencies": {
@@ -24,6 +25,8 @@
     "preset": "react-native"
   },
   "rnpm": {
-      "assets": ["./app/resources"]
+    "assets": [
+      "./app/resources"
+    ]
   }
 }

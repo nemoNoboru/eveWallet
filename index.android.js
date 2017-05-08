@@ -1,53 +1,48 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
+ * EveWallet. Made by Fvieira
+ *
  */
 
 import React, { Component } from 'react';
 import {
   AppRegistry,
   StyleSheet,
-  Text,
-  ScrollView,
-  RefreshControl
+  View,
 } from 'react-native';
-import TransactionManager from './app/components/transaction_manager';
-import Balance from './app/components/balance';
-import {requestTransactionsFromEve,
-        requestBalanceFromEve } from './app/core/walletFetcher';
+import { TabViewAnimated, TabViewPagerPan, SceneMap } from 'react-native-tab-view';
+
+import BalanceMain from './app/components/balance_main.js';
+
+const Balance = () => {return <BalanceMain/>}
+const Transactions = () => {return <BalanceMain/>}
 
 export default class eveWallet extends Component {
-  constructor(props){
-    super(props)
-    this.state = {transactions:[], refreshing:true}
-  }
+  state = {
+      index: 0,
+      routes: [
+        { key: '1', title: 'Journal' },
+        { key: '2', title: 'Transactions' },
+      ],
+    };
 
-  componentDidMount(){
-    this.fetchData()
-  }
+    _handleChangeTab = index => this.setState({ index });
 
-  fetchData = () => {
-    this.setState({refreshing:true})
-    requestTransactionsFromEve().then(
-      (data) => {this.setState({transactions:data, refreshing:false})}
-    )
-    requestBalanceFromEve().then(
-      (balance) => {this.setState({balance:balance})}
-    )
-  }
+    _renderHeader = props => <TabViewPagerPan {...props} />;
+
+    _renderScene = SceneMap({
+      '1': Balance,
+      '2': Transactions,
+    });
 
   render() {
     return (
-      <ScrollView style={styles.container}
-      refreshControl = {
-        <RefreshControl
-          refreshing={this.state.refreshing}
-          onRefresh={this.fetchData}/>
-      }>
-      <Balance balance={this.state.balance}/>
-        <TransactionManager transactions={this.state.transactions}/>
-      </ScrollView>
+      <TabViewAnimated
+        style={styles.container}
+        navigationState={this.state}
+        renderScene={this._renderScene}
+        renderHeader={this._renderHeader}
+        onRequestChangeTab={this._handleChangeTab}
+      />
     );
   }
 }
@@ -55,8 +50,10 @@ export default class eveWallet extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
   }
-});
+})
+
+
+
 
 AppRegistry.registerComponent('eveWallet', () => eveWallet);
